@@ -8,15 +8,25 @@ export class Parent extends React.Component {
         this.state = {
             passedFromChild: '[null]'
         };
+
+        console.log('ctor');
     }
 
     componentDidMount() {
+        console.log('will mount');
+
         const transService = this.props.transition.router.transitionService;
 
-        transService.onSuccess(
+        this.onSuccessDisposer = transService.onSuccess(
             { to: 'parent', from: 'child' },
             (trans, state) => this.onSuccess(trans, state)
         );
+    }
+
+    componentWillUnmount() {
+        console.log('unmount');
+
+        this.onSuccessDisposer();
     }
 
     onSuccess(trans, state) {
